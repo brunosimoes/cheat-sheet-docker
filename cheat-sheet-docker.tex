@@ -1,0 +1,278 @@
+\documentclass{a0poster}
+
+\usepackage{fancytikzposter} 
+
+%% margin for the geometry package, must be changed before using the geometry package
+\setmargin{2}
+
+%% the space between the blocks
+\setblockspacing{0.8}
+
+%% the height of the title stripe in block nodes, decrease it to save space
+ \setblocktitleheight{2}
+
+%% the number of columns in the poster, possible values 2,3
+\setcolumnnumber{3}
+
+%% the space between two or more groups of authors from different institutions
+% \setinstituteshift{10}
+
+\usecolortemplate{4}
+\usebackgroundtemplate{7}
+\usetitletemplate{2}
+\useblocknodetemplate{2}
+\useplainblocktemplate{2}
+\useinnerblocktemplate{2}
+
+\settitletextcolor{black}
+\setblocktitletextcolor{black}
+
+\setheaddrawingheight{5}
+\setbackgrounddarkcolor{white!70!white}
+\setbackgroundlightcolor{white!70!white}
+
+\usepackage[margin=\margin cm, paperwidth=84.1cm, paperheight=118.9cm]{geometry}
+\usepackage{cmbright}
+\usepackage[math]{kurier}
+\usepackage[T1]{fontenc}
+\usepackage{hyperref}
+
+\title{\vspace{4cm}}
+\author{Bruno Sim\~oes <brunogsimoes@gmail.com>}
+
+\begin{document}
+
+\ClearShipoutPicture
+\AddToShipoutPicture{\BackgroundPicture}
+
+\noindent
+\begin{tikzpicture}
+\initializesizeandshifts
+
+\titleblock{87}{0.4}
+\addlogo[center]{(0,0.5)}{7cm}{docker-logo}
+
+\blocknode%
+{Legend}%
+{
+docker-machines \vspace{0.3cm}\\
+\innerblockplain[colorone!80!]{\textcolor{red}{myserver}}
+
+Image names \vspace{0.3cm}\\
+\innerblockplain[colorone!80!]{\textcolor{magenta}{ubuntu, nginx, redis, myredis}}
+
+Container names or commit ids \vspace{0.3cm}\\
+\innerblockplain[colorone!80!]{
+\begin{tabular}{ l l }		
+\textcolor{orange}{mydb} & container name\\
+\textcolor{orange}{c7777} & commit id (see docker ps -a)
+\end{tabular}
+}
+}
+
+\blocknode%
+{Docker Machine}%
+{
+Start a machine \vspace{0.3cm}\\
+\innerblockplain[colorone!80!]{\$> docker-machine start \textcolor{red}{myserver}}
+
+Configure docker to use a specific machine \vspace{0.3cm}\\
+\innerblockplain[colorone!80!]{\$> eval \$(docker-machine env \textcolor{red}{myserver}) }
+}
+
+\blocknode%
+{Manage Images}%
+{
+Build an image from Dockerfile in current directory \vspace{0.3cm}\\
+\innerblockplain[colorone!80!]{\$> docker build -\phantom{}-tag  \textcolor{magenta}{ubuntu} .}
+
+Force rebuild of Docker image \vspace{0.3cm}\\
+\innerblockplain[colorone!80!]{\$> docker build -\phantom{}-no-cache .}
+
+Convert a container to image \vspace{0.3cm}\\
+\innerblockplain[colorone!80!]{\$> docker commit \textcolor{orange}{mydb} \textcolor{magenta}{myredis}}
+
+List local available images \vspace{0.3cm}\\
+\innerblockplain[colorone!80!]{\$>  docker images}
+
+Delete an image from local store \vspace{0.3cm}\\
+\innerblockplain[colorone!80!]{\$>  docker rmi \textcolor{magenta}{ubuntu} }
+
+Remove all unused images \vspace{0.3cm}\\
+\innerblockplain[colorone!80!]{\$>  docker rmi \$(docker images -q -f "dangling=true"}
+}
+
+\blocknode%
+{Manage Containers}%
+{
+List running containers \vspace{0.3cm}\\
+\innerblockplain[colorone!80!]{\$> docker ps}
+
+List all containers ( running \& stopped ) \vspace{0.3cm}\\
+\innerblockplain[colorone!80!]{\$> docker ps -a}
+
+Delete all stopped containers \vspace{0.3cm}\\
+\innerblockplain[colorone!80!]{\$>  docker rm \$(docker ps -\phantom{}-filter status=exited -q)}
+
+List all containers with a specific label \vspace{0.3cm}\\
+\innerblockplain[colorone!80!]{\$>  docker ps --filter label=\textcolor{olive}{mykey}}
+
+Inspect container metadata \vspace{0.3cm}\\
+\innerblockplain[colorone!80!]{\$> docker inspect \textcolor{orange}{mydb}}
+
+Query a specific metadata of a running container \vspace{0.3cm}\\
+\innerblockplain[colorone!80!]{\$>  docker inspect -f '\{\{ \textcolor{olive}{.NetworkSettings.IPAddress} \}\}' \textcolor{orange}{mydb} }
+}
+
+\startsecondcolumn 
+
+\blocknode%
+{Manage Volumes}%
+{
+Create a local volume\vspace{0.3cm}\\
+\innerblockplain[colorone!80!]{\$> docker volume create -\phantom{}-name \textcolor{olive}{myvol} }
+
+Destroy a volume\vspace{0.3cm}\\
+\innerblockplain[colorone!80!]{\$> docker volume rm \textcolor{olive}{myvol} }
+
+List volumes\vspace{0.3cm}\\
+\innerblockplain[colorone!80!]{\$> docker volume ls }
+}
+
+\blocknode%
+{Use Containers}%
+{
+Start a container in background (-d) \vspace{0.3cm}\\
+\innerblockplain[colorone!80!]{\$> docker run -d \textcolor{magenta}{nginx}}
+
+Start in background, expose port 5000 externally and map to port 80 \vspace{0.3cm}\\
+\innerblockplain[colorone!80!]{\$> docker run -p  \textcolor{olive}{5000:80} -d \textcolor{magenta}{nginx}}
+
+Start an interactive container and connect it to the terminal \vspace{0.3cm}\\
+\innerblockplain[colorone!80!]{\$> docker run -it \textcolor{magenta}{ubuntu} bash}
+
+Start a container and remove automatically after it exits \vspace{0.3cm}\\
+\innerblockplain[colorone!80!]{\$> docker run -\phantom{}-rm \textcolor{magenta}{ubuntu} bash}
+
+Start a container with a specific name \vspace{0.3cm}\\
+\innerblockplain[colorone!80!]{\$> docker run -\phantom{}-name \textcolor{orange}{mydb} \textcolor{magenta}{redis}}
+
+Restart a stopped container \vspace{0.3cm}\\
+\innerblockplain[colorone!80!]{\$> docker start \textcolor{orange}{mydb}}
+
+Stop a running container through SIGTERM \vspace{0.3cm}\\
+\innerblockplain[colorone!80!]{\$> docker stop \textcolor{orange}{mydb}}
+
+Stop a running container through SIGKILL \vspace{0.3cm}\\
+\innerblockplain[colorone!80!]{\$> docker kill \textcolor{orange}{mydb}}
+
+Combine multiple instructions\vspace{0.3cm}\\
+\innerblockplain[colorone!80!]{\$> docker run
+
+\begin{tabular}{ r l }		
+	-\phantom{}-rm & remove automatically after it exits\\
+	-it & connect container to the terminal\\
+	-\phantom{}-name \textcolor{orange}{webserver} & name the container \\
+	-p  \textcolor{olive}{80:80} & expose port 80 externally\\
+	\textcolor{magenta}{nginx} & the image for the container\\
+	 \textcolor{olive}{/bin/sh} & the command to run inside 
+\end{tabular} }
+}
+
+\blocknode%
+{Debug}%
+{
+Run another process in running container \vspace{0.3cm}\\
+\innerblockplain[colorone!80!]{\$> docker exec -it \textcolor{orange}{mydb} bash }
+
+Follow live logs (-f) with timestamps (-t) of container \vspace{0.3cm}\\
+\innerblockplain[colorone!80!]{\$> docker logs -ft \textcolor{orange}{mydb} }
+
+Print the last 100 lines of a container \vspace{0.3cm}\\
+\innerblockplain[colorone!80!]{\$> docker logs -\phantom{}-tail 100 \textcolor{orange}{mydb} }
+
+Show exposed ports of a container \vspace{0.3cm}\\
+\innerblockplain[colorone!80!]{\$> docker port \textcolor{orange}{mydb} }
+}
+
+\blocknode%
+{Security}%
+{
+Limit the max amount of memory a container can use\vspace{0.3cm}\\
+\innerblockplain[colorone!80!]{\$>  docker run -m 512m  \textcolor{magenta}{ubuntu} }
+
+Change the container's CPU share weighting relative to the weighting of all other running containers (1024 by default).\vspace{0.3cm}\\
+\innerblockplain[colorone!80!]{\$>  docker run -d -c 512  \textcolor{magenta}{ubuntu} }
+}
+
+\startthirdcolumn 
+ 
+\blocknode%
+{Manage Networks}%
+{
+List all local network\vspace{0.3cm}\\
+\innerblockplain[colorone!80!]{\$>  docker network ls }
+
+Create a local network\vspace{0.3cm}\\
+\innerblockplain[colorone!80!]{\$>  docker network create \textcolor{olive}{mynet} }
+
+Create a network and specify a subnet\vspace{0.3cm}\\
+\innerblockplain[colorone!80!]{\$>  docker network create -\phantom{}-subnet \textcolor{olive}{10.1.0.0/24} -\phantom{}-gateway \textcolor{olive}{10.1.0.1} -d \textcolor{olive}{overlay mynet}}
+
+Attach a container to a network on start\vspace{0.3cm}\\
+\innerblockplain[colorone!80!]{\$> docker run -d -\phantom{}-net \textcolor{olive}{mynet}  \textcolor{magenta}{redis}}
+
+Connect a running container from a network\vspace{0.3cm}\\
+\innerblockplain[colorone!80!]{\$>  docker network connect \textcolor{olive}{mynet} \textcolor{orange}{mydb}}
+
+Disconnect container to a network\vspace{0.3cm}\\
+\innerblockplain[colorone!80!]{\$>  docker network disconnect \textcolor{olive}{mynet} \textcolor{orange}{mydb}}
+}
+
+\blocknode%
+{Manage Swarms}%
+{
+Initialize a swarm mode and listen on a specific interface\vspace{0.3cm}\\
+\innerblockplain[colorone!80!]{\$>  docker swarm init -\phantom{}-advertise-addr \textcolor{olive}{10.1.0.2} }
+
+Join an existing swarm as a manager node\vspace{0.3cm}\\
+\innerblockplain[colorone!80!]{\$>  docker swarm join -\phantom{}-token \textcolor{olive}{manager-token 10.1.0.2:2377} }
+
+Join an existing swarm as a worker node\vspace{0.3cm}\\
+\innerblockplain[colorone!80!]{\$>  docker swarm join -\phantom{}-token \textcolor{olive}{worker-token 10.1.0.2:2377} }
+
+List all nodes participating in a swarm\vspace{0.3cm}\\
+\innerblockplain[colorone!80!]{\$>  docker node ls }
+
+Create a service and deploy 4 instances\vspace{0.3cm}\\
+\innerblockplain[colorone!80!]{\$>  docker service create -\phantom{}-replicas  \textcolor{olive}{4} -p  \textcolor{olive}{80:80}  --name \textcolor{olive}{serv} \textcolor{magenta}{nginx}}
+
+Re-scale a service\vspace{0.3cm}\\
+\innerblockplain[colorone!80!]{\$>  docker service scale \textcolor{olive}{serv}=\textcolor{olive}{6} }
+
+List the services running in a swarm\vspace{0.3cm}\\
+\innerblockplain[colorone!80!]{\$>  docker service ls}
+
+List the tasks of a service\vspace{0.3cm}\\
+\innerblockplain[colorone!80!]{\$>  docker service tasks \textcolor{olive}{serv} }
+}
+
+\blocknode%
+{Ship}%
+{
+Pull an image from a registry\vspace{0.3cm}\\
+\innerblockplain[colorone!80!]{\$>  docker pull \textcolor{magenta}{alpine:3.4} }
+
+Retag a local image\vspace{0.3cm}\\
+\innerblockplain[colorone!80!]{\$>  docker tag \textcolor{magenta}{alpine:3.4} \textcolor{magenta}{myrepo/alpine:3.4} }
+
+Login into a registry (the Docker Hub by default)\vspace{0.3cm}\\
+\innerblockplain[colorone!80!]{\$>  docker login \textcolor{olive}{my.registry.com:8000} }
+
+Push an image to a registry\vspace{0.3cm}\\
+\innerblockplain[colorone!80!]{\$>  docker push \textcolor{magenta}{myrepo/alpine:3.4} }
+}
+
+\end{tikzpicture}
+
+\end{document}
