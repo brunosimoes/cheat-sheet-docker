@@ -118,7 +118,7 @@
     \innerblockplain[colorone!80!]{\$> docker rm \$(docker ps -\phantom{}-filter status=exited -q)}
 
     List all containers with a specific label \vspace{0.3cm}\\
-    \innerblockplain[colorone!80!]{\$> docker ps --filter label=\textcolor{olive}{mykey}}
+    \innerblockplain[colorone!80!]{\$> docker ps -\phantom{}-filter label=\textcolor{olive}{mykey}}
 
     Inspect container metadata \vspace{0.3cm}\\
     \innerblockplain[colorone!80!]{\$> docker inspect \textcolor{orange}{mydb}}
@@ -251,7 +251,7 @@
     \innerblockplain[colorone!80!]{\$> docker node ls }
 
     Create a service and deploy 4 instances\vspace{0.3cm}\\
-    \innerblockplain[colorone!80!]{\$> docker service create -\phantom{}-replicas  \textcolor{olive}{4} -p  \textcolor{olive}{80:80}  --name \textcolor{olive}{serv} \textcolor{magenta}{nginx}}
+    \innerblockplain[colorone!80!]{\$> docker service create -\phantom{}-replicas  \textcolor{olive}{4} -p  \textcolor{olive}{80:80}  -\phantom{}-name \textcolor{olive}{serv} \textcolor{magenta}{nginx}}
 
     Re-scale a service\vspace{0.3cm}\\
     \innerblockplain[colorone!80!]{\$> docker service scale \textcolor{olive}{serv}=\textcolor{olive}{6} }
