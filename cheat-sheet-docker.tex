@@ -140,6 +140,9 @@
 
     List volumes\vspace{0.3cm}\\
     \innerblockplain[colorone!80!]{\$> docker volume ls }
+    
+    Remove dangling volumes\vspace{0.3cm}\\
+    \innerblockplain[colorone!80!]{\$> docker volume rm \$(docker volume ls -f dangling=true -q)}
 }
 
 \blocknode%
@@ -172,17 +175,8 @@
     Copy files/folders between a container and the local filesystem \vspace{0.3cm}\\
     \innerblockplain[colorone!80!]{\$> docker cp \textcolor{olive}{/local/path} \textcolor{orange}{mydb}:\textcolor{olive}{/container/path}}
     
-    Combine multiple instructions\vspace{0.3cm}\\
-    \innerblockplain[colorone!80!]{\$> docker run
-
-    \begin{tabular}{ r l }		
-        -\phantom{}-rm & remove automatically after it exits\\
-        -it & connect container to the terminal\\
-        -\phantom{}-name \textcolor{orange}{webserver} & name the container \\
-        -p  \textcolor{olive}{80:80} & expose port 80 externally\\
-        \textcolor{magenta}{nginx} & the image for the container\\
-         \textcolor{olive}{/bin/sh} & the command to run inside 
-    \end{tabular} }
+    Remove all exited containers\vspace{0.3cm}\\
+    \innerblockplain[colorone!80!]{\$> docker rm \$(docker ps -a -f status=exited -q)}
     }
 
 \blocknode%
